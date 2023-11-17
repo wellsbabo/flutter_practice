@@ -62,9 +62,11 @@ class HomeScreen extends StatelessWidget {
             return Column(
               children: [
                 const SizedBox(
-                  height: 200,
+                  height: 50,
                 ),
-                Expanded(child: makeList(snapshot)),
+                Expanded(
+                  child: makeList(snapshot),
+                ), //Expanded는 화면의 남는 공간을 차지하는 위젯
               ],
             );
           }
@@ -78,18 +80,50 @@ class HomeScreen extends StatelessWidget {
 
   ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
     return ListView.separated(
-      scrollDirection: Axis.horizontal,
       // ListView.builder보다 separatorBuilder라는 필수인자를 하나 더 가짐
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 20,
+      ),
       itemCount: snapshot.data!.length,
       itemBuilder: (context, index) {
         // index는 빌드되는 아이템의 index. 어떤 아이템이 빌드되는지 알 수 있음
         var webtoon = snapshot.data![index];
         // print(index);
-        return Text(webtoon.title);
+        return Column(
+          children: [
+            Container(
+              width: 250,
+              clipBehavior:
+                  Clip.hardEdge, // clipBehavior는 자식의 부모 영역 침범을 체어하는 방법
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 15, // 그림자가 얼마나 멀리까지 드리울지
+                      offset:
+                          const Offset(10, 10), // 그림자의 위치(태양의 위치를 바꾼다고 생각하면 됨)
+                      color: Colors.black.withOpacity(0.5),
+                    )
+                  ]),
+              child: Image.network(webtoon.thumb),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              webtoon.title,
+              style: const TextStyle(
+                fontSize: 22,
+              ),
+            ),
+          ],
+        );
       },
       // 위젯을 리턴해야하는 함수. 위젯은 리스트 아이템 사이에 렌더링됨(아이템을 구분하기위해)
       separatorBuilder: (context, index) => const SizedBox(
-        width: 20,
+        width: 40,
       ),
     );
   }
