@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:realtoonflix/models/webtoon_model.dart';
 import 'package:realtoonflix/services/api_service.dart';
+import 'package:realtoonflix/widgets/webtoon_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -91,34 +92,10 @@ class HomeScreen extends StatelessWidget {
         // index는 빌드되는 아이템의 index. 어떤 아이템이 빌드되는지 알 수 있음
         var webtoon = snapshot.data![index];
         // print(index);
-        return Column(
-          children: [
-            Container(
-              width: 250,
-              clipBehavior:
-                  Clip.hardEdge, // clipBehavior는 자식의 부모 영역 침범을 체어하는 방법
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 15, // 그림자가 얼마나 멀리까지 드리울지
-                      offset:
-                          const Offset(10, 10), // 그림자의 위치(태양의 위치를 바꾼다고 생각하면 됨)
-                      color: Colors.black.withOpacity(0.5),
-                    )
-                  ]),
-              child: Image.network(webtoon.thumb),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              webtoon.title,
-              style: const TextStyle(
-                fontSize: 22,
-              ),
-            ),
-          ],
+        return Webtoon(
+          title: webtoon.title,
+          thumb: webtoon.thumb,
+          id: webtoon.id,
         );
       },
       // 위젯을 리턴해야하는 함수. 위젯은 리스트 아이템 사이에 렌더링됨(아이템을 구분하기위해)
